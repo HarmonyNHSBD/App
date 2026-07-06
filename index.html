@@ -2,277 +2,522 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>NHS BD App — Harmony Fire</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Harmony NHS BD</title>
+<meta name="theme-color" content="#184F91"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Harmony NHS"/>
+<meta name="mobile-web-app-capable" content="yes"/>
 <style>
-  :root{
-    --navy:#1B2A5E; --charcoal:#1E1E1E; --ink:#2B2B2B;
-    --panel:#F4F6FA; --line:#E2E7F0; --white:#fff;
-    --good:#1E7F4F; --bad:#C0392B; --muted:#7A879C;
+  :root{ color-scheme:light;
+    --brand:#184F91; --brand-2:#2E6BB8; --brand-soft:#EAF1F9; --navy:#203864; --ink:#1E2A44; --ink-2:#55617A; --muted:#8A94A8; --muted-2:#B7BFCE;
+    --bg:#FBFCFE; --panel:#FFFFFF; --line:#EAEEF4; --line-2:#F2F5F9;
+    --good:#3F9E4D; --good-bg:#EAF6EC; --bad:#C0453B; --bad-bg:#FBEDEB; --warn:#B7791F; --warn-bg:#FBF3E3;
+    --r:16px; --r-sm:11px; --sh:0 1px 2px rgba(20,34,68,.05); --sh-h:0 8px 26px rgba(24,79,145,.10);
+    --font:'Jost','Futura','Century Gothic','Trebuchet MS',system-ui,-apple-system,'Segoe UI',sans-serif;
   }
   *{box-sizing:border-box}
-  body{margin:0;font-family:'Segoe UI',Montserrat,system-ui,Arial,sans-serif;color:var(--ink);background:var(--panel)}
-  a{color:var(--navy)}
-  /* ---- top bar ---- */
-  header{background:var(--charcoal);color:#fff;display:flex;align-items:center;gap:24px;padding:0 22px;height:58px}
-  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;letter-spacing:.3px}
-  .logo .mark{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:2px solid #fff;border-radius:50%;font-size:13px;font-weight:700}
-  .logo small{font-weight:400;opacity:.7;font-size:12px;margin-left:6px}
-  nav{display:flex;gap:4px;margin-left:8px;flex:1}
-  nav button{background:none;border:0;color:#cfd6e6;padding:8px 13px;border-radius:7px;cursor:pointer;font-size:14px}
-  nav button:hover{background:rgba(255,255,255,.08);color:#fff}
-  nav button.active{background:var(--navy);color:#fff}
-  .who{font-size:13px;color:#cfd6e6;display:flex;align-items:center;gap:12px}
-  .who button{background:none;border:1px solid #4a4a4a;color:#cfd6e6;border-radius:6px;padding:5px 10px;cursor:pointer}
-  /* ---- layout ---- */
-  main{max-width:1180px;margin:0 auto;padding:24px 22px 60px}
-  h1{font-size:22px;color:var(--navy);margin:4px 0 2px}
-  .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
-  .toggle{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:9px;padding:3px;margin-bottom:18px}
-  .toggle button{border:0;background:none;padding:7px 15px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--muted)}
-  .toggle button.active{background:var(--navy);color:#fff}
-  .group{margin-bottom:26px}
-  .group h2{font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 10px;font-weight:700}
-  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 16px}
-  .card .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-  .card .val{font-size:26px;font-weight:700;color:var(--navy);margin:6px 0 2px}
-  .card .tgt{font-size:12px;color:var(--muted)}
-  .bar{height:7px;border-radius:5px;background:#EBEFF6;margin-top:11px;overflow:hidden}
-  .bar > i{display:block;height:100%;border-radius:5px;background:var(--navy)}
-  .pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:8px}
-  .pill.good{background:#E4F3EB;color:var(--good)} .pill.bad{background:#F8E6E4;color:var(--bad)}
-  /* ---- login ---- */
-  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--charcoal)}
-  .login{background:#fff;border-radius:16px;padding:34px 32px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-  .login .logo{color:var(--charcoal);justify-content:center;margin-bottom:6px}
-  .login .logo .mark{border-color:var(--charcoal)}
-  .login h3{text-align:center;color:var(--navy);margin:6px 0 2px;font-size:18px}
-  .login p.hint{text-align:center;color:var(--muted);font-size:12px;margin:0 0 20px}
-  label.f{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}
-  input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px}
-  .btn{width:100%;margin-top:18px;background:var(--navy);color:#fff;border:0;border-radius:9px;padding:12px;font-size:15px;font-weight:600;cursor:pointer}
-  .btn:disabled{opacity:.6;cursor:default}
-  .btn.secondary{background:none;color:var(--navy);margin-top:8px;font-weight:500;font-size:13px}
+  html,body{margin:0}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;font-size:14px;letter-spacing:.1px}
+  .app{display:flex;min-height:100vh;min-height:100dvh}
+  .side{width:230px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 16px;position:sticky;top:0;height:100vh;height:100dvh}
+  .brand{padding:2px 8px 22px}.brand svg{height:30px;width:auto}
+  .navlbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-weight:700;padding:16px 12px 8px}
+  .nav{display:flex;flex-direction:column;gap:1px}
+  .nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--ink-2);font-size:13.5px;font-weight:500;cursor:pointer;transition:.14s}
+  .nav a svg{width:17px;height:17px;flex-shrink:0;color:var(--muted)}
+  .nav a:hover{background:var(--line-2);color:var(--ink)}
+  .nav a.active{background:var(--brand-soft);color:var(--brand);font-weight:600}.nav a.active svg{color:var(--brand)}
+  .nav .tag{margin-left:auto;font-size:9px;background:var(--brand-soft);color:var(--brand);padding:2px 6px;border-radius:5px;font-weight:700}
+  .sfoot{margin-top:auto;padding:14px 12px 2px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+  .sfoot .who{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sfoot .rl{font-size:10.5px;color:var(--muted-2);padding-left:16px;margin-top:1px}
+  .sfoot button{margin-top:9px;background:var(--line-2);border:0;color:var(--ink-2);border-radius:7px;padding:7px 9px;cursor:pointer;font-size:11.5px;font-family:inherit}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--good);flex-shrink:0}
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .top{display:flex;align-items:center;gap:20px;padding:26px 34px 12px;flex-wrap:wrap}
+  .top h1{margin:0;font-size:23px;font-weight:600;letter-spacing:-.3px;color:var(--navy)}
+  .top .sub{font-size:12.5px;color:var(--muted);margin-top:4px;font-weight:500}
+  .pc{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:3px}
+  .seg button{border:0;background:none;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--muted);font-family:inherit}
+  .seg button.active{background:var(--brand);color:#fff}
+  .step{display:inline-flex;align-items:center;gap:2px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:3px}
+  .step button{border:0;background:none;width:30px;height:30px;border-radius:8px;cursor:pointer;color:var(--ink-2);font-size:16px;display:flex;align-items:center;justify-content:center;font-family:inherit}
+  .step button:hover:not(:disabled){background:var(--brand-soft);color:var(--brand)}
+  .step button:disabled{color:var(--muted-2)}
+  .step .rng{min-width:116px;text-align:center;font-size:12.5px;font-weight:600;color:var(--navy);padding:0 6px}
+  .content{padding:12px 34px 60px}
+  .sec{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700;margin:28px 2px 14px;display:flex;align-items:center;gap:14px}
+  .sec:first-child{margin-top:6px}.sec .rule{height:1px;background:var(--line);flex:1}
+  .bar{display:flex;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 22px;flex-wrap:wrap}
+  .bar .lead{font-size:15px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:10px}
+  .chips{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .chip{font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--bg);color:var(--ink-2);border:1px solid var(--line)}
+  .chip b{font-weight:700;color:var(--ink)}
+  .chip.good{background:var(--good-bg);color:var(--good);border-color:transparent}.chip.good b{color:var(--good)}
+  .chip.bad{background:var(--bad-bg);color:var(--bad);border-color:transparent}.chip.bad b{color:var(--bad)}
+  .chip.acc{background:var(--brand-soft);color:var(--brand);border-color:transparent}.chip.acc b{color:var(--brand)}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .kpi{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+  .kpi:hover{border-color:#D3DDEC;box-shadow:var(--sh-h);transform:translateY(-2px)}
+  .kpi.flat{cursor:default}.kpi.flat:hover{transform:none;box-shadow:none;border-color:var(--line)}
+  .krow{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+  .ki{width:32px;height:32px;border-radius:9px;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0}.ki svg{width:16px;height:16px}
+  .klab{font-size:12px;color:var(--ink-2);font-weight:600;flex:1;min-width:0}
+  .chev{color:var(--muted-2);opacity:0;transition:.15s}.kpi:hover .chev{opacity:1;color:var(--brand)}
+  .kval{font-size:29px;font-weight:600;color:var(--navy);letter-spacing:-.5px;line-height:1}
+  .ksub{font-size:12px;color:var(--muted);margin-top:9px;display:flex;justify-content:space-between;gap:8px;font-weight:500}.ksub b{color:var(--ink-2);font-weight:600}
+  .tag{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .tag.good{background:var(--good-bg);color:var(--good)}.tag.bad{background:var(--bad-bg);color:var(--bad)}.tag.warn{background:var(--warn-bg);color:var(--warn)}.tag.none{background:var(--bg);color:var(--muted)}
+  .track{position:relative;height:5px;border-radius:3px;background:var(--line);margin-top:13px;overflow:visible}
+  .track .fill{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+  .track .pin{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--navy);border-radius:2px;opacity:.5}
+  .people{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+  .pc-c{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .ph{display:flex;align-items:center;gap:11px;padding:16px 18px;border-bottom:1px solid var(--line-2)}
+  .ava{width:34px;height:34px;border-radius:9px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+  .ph .pn{font-weight:600;font-size:14px;color:var(--navy)}.ph .pr{font-size:11px;color:var(--muted);margin-top:1px}
+  .pr-row{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line-2);cursor:pointer}
+  .pr-row:last-child{border-bottom:0}.pr-row:hover{background:var(--line-2)}
+  .pr-row .l{flex:1;font-size:13px;color:var(--ink-2);font-weight:500}
+  .pr-row .st{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px}
+  .pr-row .v{font-size:16px;font-weight:600;color:var(--navy);min-width:48px;text-align:right}.pr-row .cx{color:var(--muted-2);font-size:15px}
+  .board{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .bh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line-2)}
+  .bh h3{margin:0;font-size:14px;font-weight:600;color:var(--navy)}
+  .bh .tot{font-size:12.5px;font-weight:600;color:var(--brand);background:var(--brand-soft);padding:5px 12px;border-radius:7px}
+  .row{display:grid;grid-template-columns:22px 1fr 74px 112px;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--line-2)}
+  .row.click{cursor:pointer}.row.click:hover{background:var(--line-2)}.row:last-child{border-bottom:0}
+  .rk{font-size:12px;font-weight:700;color:var(--muted-2);text-align:center}
+  .who{display:flex;align-items:center;gap:10px;min-width:0}
+  .av2{width:28px;height:28px;border-radius:8px;background:#AEB8C8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}.av2.hl{background:var(--brand)}
+  .nm{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+  .tg{font-size:9px;font-weight:700;color:var(--brand);background:var(--brand-soft);padding:2px 6px;border-radius:5px;margin-left:7px}
+  .minibar{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:6px}.minibar>i{display:block;height:100%;background:var(--brand)}
+  .rc{text-align:right;font-size:12.5px;color:var(--muted);font-weight:500}.rv{text-align:right;font-size:13.5px;font-weight:600;color:var(--navy)}
+  .row.total{background:var(--bg)}.row.total .nm{color:var(--brand);font-weight:700}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.two{grid-template-columns:1fr}}
+  .gauge{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+  .gauge .cap{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .gauge .pct{font-size:56px;font-weight:600;color:var(--navy);letter-spacing:-2px;line-height:1;margin:8px 0 2px}.gauge .pct small{font-size:22px;font-weight:600;color:var(--muted-2)}
+  .gauge .expl{font-size:13px;color:var(--ink-2);margin-top:2px;font-weight:500}
+  .lad{display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--line-2)}.lad:last-child{border-bottom:0}
+  .lad .lp{width:44px;font-weight:700;font-size:13px}.lad .lt{flex:1;height:7px;border-radius:4px;background:var(--line);overflow:hidden}.lad .lt i{display:block;height:100%}
+  .lad .lv{width:72px;text-align:right;font-weight:600;font-size:12.5px}.lad .lc{width:18px;text-align:center;font-weight:800;color:var(--good)}
+  .trk{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+  .trk .cap{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:8px}.trk .cap div{font-size:12px;color:var(--muted);font-weight:500}.trk .cap b{display:block;font-size:19px;color:var(--navy);font-weight:600;margin-top:2px}
+  .lgd{display:flex;gap:16px;font-size:11.5px;color:var(--ink-2);font-weight:500;margin-top:6px}.lgd span{display:inline-flex;align-items:center;gap:6px}.lgd i{width:14px;height:3px;border-radius:2px;display:inline-block}
+  .hl{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .hi{display:flex;gap:12px;align-items:flex-start;padding:13px 18px;border-bottom:1px solid var(--line-2)}.hi:last-child{border-bottom:0}
+  .hicon{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}.hicon svg{width:15px;height:15px}
+  .hi .ht{flex:1;font-size:13px;color:var(--ink);font-weight:500;line-height:1.35}.hi .ht small{display:block;color:var(--muted);font-weight:500;font-size:11.5px;margin-top:1px}
+  .hi .hv{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap}
+  .note{font-size:11px;color:var(--muted);margin-top:22px;line-height:1.65;border-top:1px solid var(--line);padding-top:14px;font-weight:500}
+  .empty{padding:32px 20px;text-align:center;color:var(--muted);font-size:13px;font-weight:500}
+  .cta{display:inline-block;margin-top:16px;background:var(--brand);color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;padding:11px 20px;border-radius:10px;border:0;cursor:pointer;font-family:inherit}
+  /* rocks */
+  .rockcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .rockcard.me{border-color:#C0CCEC;box-shadow:0 0 0 2px #E3E9F9}
+  .rockrow{display:flex;align-items:center;gap:11px;padding:12px 17px;border-bottom:1px solid var(--line-2)}.rockrow:last-child{border-bottom:0}
+  .cb{width:20px;height:20px;border-radius:6px;border:2px solid var(--muted-2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:900}.cb.on{background:var(--good);border-color:var(--good)}
+  .rt{flex:1;font-size:13px;line-height:1.4;color:var(--ink-2)}.rt.done{text-decoration:line-through;color:var(--muted)}
+  input.ri{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit}
+  .rockfoot{display:flex;gap:8px;padding:12px 17px}
+  .radd{flex:1;background:var(--brand-soft);color:var(--brand);border:0;border-radius:9px;padding:9px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .rsave{flex:1;background:var(--brand);color:#fff;border:0;border-radius:9px;padding:9px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit}
+  .rsave:disabled{opacity:.55}
+  .feed .fitem{display:flex;gap:11px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line-2);font-size:13px}.feed .fitem:last-child{border-bottom:0}
+  .fdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}.fitem .ft{flex:1;color:var(--ink-2)}.fitem .fw{font-size:11px;color:var(--muted)}
+  .toast{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));background:var(--navy);color:#fff;padding:13px 17px;border-radius:11px;box-shadow:0 16px 40px rgba(0,0,0,.3);font-size:13px;font-weight:600;z-index:80;max-width:340px;display:flex;gap:10px;align-items:center}
+  .ov{position:fixed;inset:0;background:rgba(24,42,74,.4);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60}
+  .modal{background:#fff;border-radius:18px;width:min(940px,96vw);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 90px rgba(24,42,74,.3)}
+  .mh{background:var(--brand);color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:flex-start}
+  .mh .mt{font-size:15px;font-weight:600}.mh .ms{font-size:12px;opacity:.85;margin-top:3px}
+  .mh button{background:rgba(255,255,255,.18);border:0;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:15px;font-family:inherit}
+  .msum{display:flex;gap:28px;padding:15px 22px;background:var(--bg);border-bottom:1px solid var(--line)}
+  .msum div{font-size:11.5px;color:var(--muted);font-weight:600}.msum div b{display:block;font-size:19px;color:var(--navy);font-weight:600;margin-top:2px}
+  .mb{overflow:auto}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  thead th{position:sticky;top:0;background:#fff;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em;text-align:left;padding:11px 22px;border-bottom:1px solid var(--line);font-weight:700}
+  tbody td{padding:11px 22px;border-bottom:1px solid var(--line-2);color:var(--ink-2)}tbody tr:hover td{background:var(--bg)}
+  td.n,th.n{text-align:right}.mb a{color:var(--brand);text-decoration:none;font-weight:600}
+  /* login */
+  .login-wrap{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;background:var(--brand);padding:20px}
+  .login{background:#fff;border-radius:18px;padding:34px 32px;width:min(380px,100%);box-shadow:0 30px 80px rgba(0,0,0,.3)}
+  .login .lb{display:flex;justify-content:center;margin-bottom:6px}.login .lb svg{height:34px}
+  .login h3{text-align:center;color:var(--navy);margin:12px 0 2px;font-size:18px;font-weight:600}
+  .login p.hint{text-align:center;color:var(--muted);font-size:12px;margin:0 0 18px;font-weight:500}
+  label.f{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px;font-weight:600}
+  input{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-family:inherit}
+  .btn{width:100%;margin-top:20px;background:var(--brand);color:#fff;border:0;border-radius:10px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn:disabled{opacity:.6}.btn.sec{background:none;color:var(--brand);margin-top:8px;font-weight:600;font-size:13px}
   .err{color:var(--bad);font-size:13px;margin-top:12px;text-align:center;min-height:16px}
-  .empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:30px;text-align:center;color:var(--muted)}
-  .soon{background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;color:var(--muted)}
+  @media(max-width:820px){.app{flex-direction:column}.side{width:auto;height:auto;position:static;flex-direction:row;align-items:center;overflow-x:auto;padding:10px 12px;border-right:0;border-bottom:1px solid var(--line)}.brand{padding:0 12px 0 2px}.navlbl,.sfoot{display:none}.nav{flex-direction:row}.top{padding:16px}.content{padding:10px 16px 44px}.top h1{font-size:19px}}
 </style>
 </head>
 <body>
-<div id="app"></div>
-
+<div id="root"></div>
+<div id="modal"></div>
+<div id="toast"></div>
 <script>
-/* ============================================================
-   CONFIG — fill these two in with your Supabase project values
-   (Settings -> API). The anon/public key is safe to embed here.
-   ============================================================ */
-const SUPABASE_URL = "https://jhazoukuewglpfdvbwpb.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoYXpvdWt1ZXdnbHBmZHZid3BiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MDg3MDUsImV4cCI6MjA5ODQ4NDcwNX0.9-hp5yidBz1VrD2wsKBzY25ZYwyHmIuWqWl5Bvak3HI";
-
-/* ---------- tiny Supabase REST helpers (no library) ---------- */
-const SB = {
-  token: null, refresh: null, user: null,
-  save(s){ this.token=s.access_token; this.refresh=s.refresh_token;
-    localStorage.setItem('nhs_sess', JSON.stringify({a:s.access_token,r:s.refresh_token})); },
-  load(){ try{ const s=JSON.parse(localStorage.getItem('nhs_sess')); if(s){this.token=s.a;this.refresh=s.r;return true;} }catch(e){} return false; },
-  clear(){ this.token=this.refresh=this.user=null; localStorage.removeItem('nhs_sess'); },
-  async login(email,password){
-    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
-      method:'POST',headers:{apikey:SUPABASE_ANON_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({email,password})});
-    const d = await r.json(); if(!r.ok) throw new Error(d.error_description||d.msg||'Login failed');
-    this.save(d); return d;
-  },
-  async signup(email,password){
-    const r = await fetch(`${SUPABASE_URL}/auth/v1/signup`,{
-      method:'POST',headers:{apikey:SUPABASE_ANON_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({email,password})});
-    const d = await r.json(); if(!r.ok) throw new Error(d.error_description||d.msg||'Sign-up failed');
-    if(d.access_token) this.save(d); return d;
-  },
-  async doRefresh(){
-    if(!this.refresh) return false;
-    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{
-      method:'POST',headers:{apikey:SUPABASE_ANON_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({refresh_token:this.refresh})});
-    if(!r.ok){ this.clear(); return false; }
-    this.save(await r.json()); return true;
-  },
-  async me(){
-    const r = await this.authGet(`${SUPABASE_URL}/auth/v1/user`);
-    if(!r) return null; this.user = r; return r;
-  },
-  async authGet(url){
-    let res = await fetch(url,{headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${this.token}`}});
-    if(res.status===401 && await this.doRefresh())
-      res = await fetch(url,{headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${this.token}`}});
-    if(!res.ok) return null; return res.json();
-  },
-  rest(path){ return this.authGet(`${SUPABASE_URL}/rest/v1/${path}`); }
+const LOGO='<svg viewBox="0 0 200 40" role="img" aria-label="harmony"><circle cx="20" cy="20" r="16.5" fill="none" stroke="#184F91" stroke-width="2.6"/><text x="20" y="28.5" text-anchor="middle" font-family="Jost,Futura,Century Gothic,system-ui,sans-serif" font-size="23" font-weight="600" fill="#184F91">h</text><text x="46" y="28.5" font-family="Jost,Futura,Century Gothic,system-ui,sans-serif" font-size="25" font-weight="600" fill="#184F91" letter-spacing="-.5">harmony</text></svg>';
+const SUPABASE_URL="https://jhazoukuewglpfdvbwpb.supabase.co";
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoYXpvdWt1ZXdnbHBmZHZid3BiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5MDg3MDUsImV4cCI6MjA5ODQ4NDcwNX0.9-hp5yidBz1VrD2wsKBzY25ZYwyHmIuWqWl5Bvak3HI";
+const SB={t:null,r:null,email:null,uid:null,
+  save(s){this.t=s.access_token;this.r=s.refresh_token;localStorage.setItem('nhs_s',JSON.stringify({a:s.access_token,r:s.refresh_token}));},
+  load(){try{const s=JSON.parse(localStorage.getItem('nhs_s'));if(s){this.t=s.a;this.r=s.r;return true;}}catch(e){}return false;},
+  clear(){this.t=this.r=null;localStorage.removeItem('nhs_s');},
+  async login(e,p){const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})});const d=await r.json();if(!r.ok)throw new Error(d.error_description||d.msg||'Login failed');this.save(d);},
+  async signup(e,p){const r=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})});const d=await r.json();if(!r.ok)throw new Error(d.error_description||d.msg||'Sign-up failed');if(d.access_token)this.save(d);return d;},
+  async me(){const r=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${this.t}`}});if(!r.ok)return null;const u=await r.json();this.email=u.email;this.uid=u.id;return u;},
+  async rest(path,opts){opts=opts||{};const h=Object.assign({apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${this.t}`,'Content-Type':'application/json'},opts.headers||{});
+    const r=await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
+    if(!r.ok){let m='';try{m=(await r.json()).message||'';}catch(e){}throw new Error(m||('DB error '+r.status));}
+    if(r.status===204)return null;const t=await r.text();return t?JSON.parse(t):null;}
 };
 
-/* ---------- formatting ---------- */
-const gbp = v => '£'+Number(v||0).toLocaleString('en-GB',{maximumFractionDigits:0});
-const num = v => Number(v||0).toLocaleString('en-GB');
-const el = document.getElementById('app');
-const LOGO = `<div class="logo"><span class="mark">h</span>harmony<small>NHS BD</small></div>`;
-
-/* ---------- state ---------- */
-let profile=null, period='week', tab='leadgen', lgProfiles=[];
-
-/* ============================================================
-   LOGIN VIEW
-   ============================================================ */
-function renderLogin(mode){
-  mode = mode||'login';
-  el.innerHTML = `<div class="login-wrap"><form class="login" id="lf">
-    ${LOGO.replace('class="logo"','class="logo"')}
-    <h3>${mode==='login'?'Sign in':'Set your password'}</h3>
-    <p class="hint">${mode==='login'?'NHS Business Development team':'First time? Create your password below.'}</p>
-    <label class="f">Work email</label>
-    <input id="em" type="email" autocomplete="username" placeholder="you@harmonyfire.com"/>
-    <label class="f">Password</label>
-    <input id="pw" type="password" autocomplete="${mode==='login'?'current-password':'new-password'}" placeholder="••••••••"/>
-    <button class="btn" id="go">${mode==='login'?'Sign in':'Create password & sign in'}</button>
-    <button type="button" class="btn secondary" id="sw">${mode==='login'?"First time? Set your password":'Back to sign in'}</button>
-    <div class="err" id="er"></div>
-  </form></div>`;
-  document.getElementById('sw').onclick=()=>renderLogin(mode==='login'?'signup':'login');
-  document.getElementById('lf').onsubmit=async(e)=>{
-    e.preventDefault();
-    const b=document.getElementById('go'), er=document.getElementById('er');
-    const email=document.getElementById('em').value.trim(), pw=document.getElementById('pw').value;
-    if(!email||!pw){er.textContent='Enter your email and password.';return;}
-    b.disabled=true; er.textContent='';
-    try{
-      if(mode==='login') await SB.login(email,pw); else await SB.signup(email,pw);
-      if(!SB.token){ er.textContent='Check your inbox to confirm, then sign in.'; b.disabled=false; return; }
-      await boot();
-    }catch(err){ er.textContent=err.message; b.disabled=false; }
-  };
-}
-
-/* ============================================================
-   APP SHELL
-   ============================================================ */
-function tabsFor(p){
-  const t=[];
-  if(p.role==='admin'||p.team==='management'){ t.push(['leadgen','Lead Gen'],['bd','BD'],['mgmt','Management']); }
-  else if(p.team==='lead_gen'){ t.push(['leadgen','Lead Gen']); }
-  else if(p.team==='bd'){ t.push(['bd','BD']); }
-  if(p.is_rock_owner||p.role==='admin'||p.team==='management') t.push(['rocks','Rocks']);
-  t.push(['bonus','Bonus'],['huddle','Huddle']);
-  if(p.role==='admin') t.push(['admin','Admin']);
-  return t;
-}
-function renderShell(body){
-  const tabs=tabsFor(profile).map(([k,l])=>`<button data-t="${k}" class="${tab===k?'active':''}">${l}</button>`).join('');
-  el.innerHTML=`<header>${LOGO}<nav>${tabs}</nav>
-    <div class="who">${profile.full_name} · ${profile.team.replace('_',' ')}<button id="out">Sign out</button></div></header>
-    <main id="main">${body}</main>`;
-  document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;route();});
-  document.getElementById('out').onclick=()=>{SB.clear();renderLogin();};
-}
-
-/* ---------- period toggle ---------- */
-function periodToggle(){
-  return `<div class="toggle">${['week','month','quarter'].map(p=>
-    `<button data-p="${p}" class="${period===p?'active':''}">${p[0].toUpperCase()+p.slice(1)}</button>`).join('')}</div>`;
-}
-function wirePeriod(){ document.querySelectorAll('.toggle button').forEach(b=>b.onclick=()=>{period=b.dataset.p;route();}); }
-
-/* ---------- metric card ---------- */
-function card(label, value, isMoney, target){
-  let bar='', tgt='', pill='';
-  if(target){
-    const pct=Math.min(100,Math.round((value/target)*100));
-    bar=`<div class="bar"><i style="width:${pct}%;background:${value>=target?'var(--good)':'var(--navy)'}"></i></div>`;
-    tgt=`<div class="tgt">Target ${isMoney?gbp(target):num(target)} · ${pct}%</div>`;
-    pill=`<span class="pill ${value>=target?'good':'bad'}">${value>=target?'On target':'Behind'}</span>`;
+const SFB="https://harmonyfire.lightning.force.com";
+const RPT={calls:"00OQ500000b0CryMAE",meetings:"00OQ500000cy9H3MAI",handover:"00OQ500000dDmZpMAK"};
+const KYLE="005Q5000009hJqDIAU",FLYNN="005Q500000ETQAMIA5",RO="0058d000007kYuvAAE",LR="0058d000006JyAVAA0",KY="005Q50000016igvIAA",CO="0058d000000jkWlAAI",DEN="0058d000007kYSdAAM",BILLY="0058d000006JfXjAAK";
+const W=[
+ ["006Q500000XN7CHIA1","Northumbria Healthcare NHS - Survey and Door Replacements - MTC","Northumbria Healthcare NHS Foundation Trust","Royce Morton",RO,"Royce Morton","01 - Whisper On A Street",800000],
+ ["006Q500000XL3azIAD","Compartmentation Survey Rems. - £500k-1m budget","Chelsea and Westminster Hospital NHS Foundation Trust","Flynn Thomas",FLYNN,"Larson Rubie","02 - Validating Lead",500000],
+ ["006Q500000XMNW1IAP","Central North West QTS NHS - 4 Building Pilot Test","Central & North West London NHS Foundation Trust (QTS)","Royce Morton",RO,"Royce Morton","03 - Booking Strike Meeting",150000],
+ ["006Q500000XJ8riIAD","South West Yorkshire NHS - Trust Wide Damper Programme","South West Yorkshire Partnership NHS Foundation Trust","Kyle Glanfield",KYLE,"Royce Morton","01 - Whisper On A Street",100000],
+ ["006Q500000XLMddIAH","Kingston and Richmond NHS - Damper Programme","Kingston and Richmond Hospital NHS Foundation Trust","Kyle Glanfield",KYLE,"Royce Morton","01 - Whisper On A Street",100000],
+ ["006Q500000XLxYMIA1","Mid Yorkshire - Compartmentation Programme","Mid Yorkshire Teaching NHS Trust","Flynn Thomas",FLYNN,"Flynn Thomas","02 - Validating Lead",100000],
+ ["006Q500000XN70zIAD","Northumbria Healthcare NHS - Trust Wide Retrospective Fire Strategies","Northumbria Healthcare NHS Foundation Trust","Royce Morton",RO,"Royce Morton","02 - Validating Lead",100000],
+ ["006Q500000XNhvhIAD","Hollins Park, Compartmentation Programme","Mersey Care NHS Foundation Trust","Flynn Thomas",FLYNN,"Flynn Thomas","02 - Validating Lead",100000],
+ ["006Q500000XPhunIAD","Royal Berkshire NHS - Riba Stage 2 Design","Royal Berkshire NHS Foundation Trust","Kyran Cuckson",KY,"Royce Morton","03 - Booking Strike Meeting",60000],
+ ["006Q500000XMPSzIAP","Isle of Wight NHS - Retrospective Fire Strategies FY26","Isle of Wight NHS Trust","Connor Mitchell",CO,"Royce Morton","02 - Validating Lead",50000],
+ ["006Q500000XOA3FIAX","Yorkshire Ambulance Service NHS - Door Inspections & Replacements Pilot","Yorkshire Ambulance Service NHS Trust","Kyle Glanfield",KYLE,"Royce Morton","01 - Whisper On A Street",50000],
+ ["006Q500000XJQS1IAP","Fire Stopping FY26/27","Betsi Cadwaladr University Health Board","Flynn Thomas",FLYNN,"Flynn Thomas","01 - Whisper On A Street",50000],
+ ["006Q500000XJIhQIAX","South West Yorkshire NHS - Fire Curtain Replacement (Doncaster)","South West Yorkshire Partnership NHS Foundation Trust","Kyle Glanfield",KYLE,"Royce Morton","01 - Whisper On A Street",50000],
+ ["006Q500000XO0f2IAD","St Johns Hospice, Fire Curtain","Rotherham, Doncaster and South Humber NHS Foundation Trust","Flynn Thomas",FLYNN,"Flynn Thomas","01 - Whisper On A Street",30000],
+ ["006Q500000XPO5nIAH","Wye Valley NHS - Retrospective Fire Strategies","Wye Valley NHS Trust","Royce Morton",RO,"Royce Morton","01 - Whisper On A Street",25000],
+ ["006Q500000XQjhdIAD","South Tees Hospital NHS - Fire Risk Assessment Programme","South Tees Hospital NHS Foundation Trust","Kyle Glanfield",KYLE,"Royce Morton","01 - Whisper On A Street",25000],
+ ["006Q500000XSnVsIAL","CoCH - Primary FRA","Countess of Chester Hospital NHS Foundation Trust","Flynn Thomas",FLYNN,"Larson Rubie","01 - Whisper On A Street",20000],
+ ["006Q500000XJMkzIAH","Alder Hey - Fire Door Surveys","Alder Hey Children's Hospital NHS Foundation Trust","Flynn Thomas",FLYNN,"Royce Morton","03 - Booking Strike Meeting",10000],
+ ["006Q500000XPvEbIAL","Buxton Health Centre - Pilot Door","Derbyshire Community Health Services NHS Foundation Trust","Kyran Cuckson",KY,"Royce Morton","03 - Booking Strike Meeting",8000]];
+const MQ=[
+ ["006Q500000XN7CHIA1","Northumbria Healthcare NHS - Survey and Door Replacements - MTC","Northumbria Healthcare NHS Foundation Trust","Royce Morton",RO,"Royce Morton","01 - Whisper On A Street",800000],
+ ["006Q500000XNhvhIAD","Hollins Park, Compartmentation Programme","Mersey Care NHS Foundation Trust","Flynn Thomas",FLYNN,"Flynn Thomas","02 - Validating Lead",100000],
+ ["006Q500000XN70zIAD","Northumbria Healthcare NHS - Trust Wide Retrospective Fire Strategies","Northumbria Healthcare NHS Foundation Trust","Royce Morton",RO,"Royce Morton","02 - Validating Lead",100000],
+ ["006Q500000XPhunIAD","Royal Berkshire NHS - Riba Stage 2 Design","Royal Berkshire NHS Foundation Trust","Kyran Cuckson",KY,"Royce Morton","03 - Booking Strike Meeting",60000],
+ ["006Q500000XOA3FIAX","Yorkshire Ambulance Service NHS - Door Inspections & Replacements Pilot","Yorkshire Ambulance Service NHS Trust","Kyle Glanfield",KYLE,"Royce Morton","01 - Whisper On A Street",50000],
+ ["006Q500000XO0f2IAD","St Johns Hospice, Fire Curtain","Rotherham, Doncaster and South Humber NHS Foundation Trust","Flynn Thomas",FLYNN,"Flynn Thomas","01 - Whisper On A Street",30000],
+ ["006Q500000XPO5nIAH","Wye Valley NHS - Retrospective Fire Strategies","Wye Valley NHS Trust","Royce Morton",RO,"Royce Morton","01 - Whisper On A Street",25000],
+ ["006Q500000XQjhdIAD","South Tees Hospital NHS - Fire Risk Assessment Programme","South Tees Hospital NHS Foundation Trust","Kyle Glanfield",KYLE,"Royce Morton","01 - Whisper On A Street",25000],
+ ["006Q500000XSnVsIAL","CoCH - Primary FRA","Countess of Chester Hospital NHS Foundation Trust","Flynn Thomas",FLYNN,"Larson Rubie","01 - Whisper On A Street",20000],
+ ["006Q500000XPvEbIAL","Buxton Health Centre - Pilot Door","Derbyshire Community Health Services NHS Foundation Trust","Kyran Cuckson",KY,"Royce Morton","03 - Booking Strike Meeting",8000]];
+function P(b,h,o,c,opp){return {booked:b,held:h,outbound:o,connected:c,oppys:opp};}
+const SNAP={ generatedAt:"6 Jul 2026",
+  lg:{
+    W:{people:{[KYLE]:P(8,1,225,37,325000),[FLYNN]:P(9,1,153,34,810000)},team:P(17,2,378,71,2328000),opps:W},
+    M:{people:{[KYLE]:P(5,0,135,19,75000),[FLYNN]:P(2,1,60,14,150000)},team:P(7,1,195,33,1218000),opps:MQ},
+    Q:{people:{[KYLE]:P(5,0,135,19,75000),[FLYNN]:P(2,1,60,14,150000)},team:P(7,1,195,33,1218000),opps:MQ},
+    lastW:{people:{[KYLE]:P(8,1,226,29,475000),[FLYNN]:P(9,1,154,34,810000)},team:P(17,2,380,63,2478000),gens:[["Royce Morton",RO,4,1075000],["Flynn Thomas",FLYNN,7,810000],["Kyle Glanfield",KYLE,8,475000],["Kyran Cuckson",KY,2,68000],["Connor Mitchell",CO,1,50000]]},
+    lastM:{people:{[KYLE]:P(48,5,883,286,4980000),[FLYNN]:P(50,2,917,185,6211400)},team:P(98,7,1800,471,12776614.75),gens:[["Flynn Thomas",FLYNN,30,6211400],["Kyle Glanfield",KYLE,29,4980000],["Royce Morton",RO,4,802000],["Kyran Cuckson",KY,6,567650],["Connor Mitchell",CO,2,215564.75]]},
+    lastQ:{people:{[KYLE]:P(108,5,1954,726,13815000),[FLYNN]:P(97,14,2002,398,15621381.39)},team:P(205,19,3956,1124,54917982.69),gens:[["Flynn Thomas",FLYNN,55,15621381.39],["Kyle Glanfield",KYLE,54,13815000],["Kyran Cuckson",KY,10,11647650],["Connor Mitchell",CO,10,9021457.69],["Billy James",BILLY,1,2100000],["Royce Morton",RO,14,1708436.83],["Denver Melvin",DEN,3,557734.48],["Larson Rubie",LR,2,446322.3]]}
+  },
+  bd:{
+    meetings:{W:{[LR]:{booked:2,held:7},[RO]:{booked:3,held:3}},M:{[LR]:{booked:1,held:5},[RO]:{booked:3,held:2}},Q:{[LR]:{booked:1,held:5},[RO]:{booked:3,held:2}},
+      lastW:{[LR]:{booked:2,held:7},[RO]:{booked:3,held:3}},lastM:{[LR]:{booked:6,held:31},[RO]:{booked:7,held:40}},lastQ:{[LR]:{booked:20,held:96},[RO]:{booked:24,held:84}}},
+    handover:{
+      M:{actual:{total:0,by:[]},forecast:{total:3256460.92,by:[["Larson Rubie",2955000,5],["Royce Morton",301460.92,5]]}},
+      Q:{actual:{total:0,by:[]},forecast:{total:5036460.92,by:[["Royce Morton",1941460.92,21],["Larson Rubie",3085000,7],["Flynn Thomas",10000,1]]}},
+      lastM:{actual:{total:4520627.62,by:[["Connor Mitchell",4200000,2],["Larson Rubie",165564.75,1],["Royce Morton",155062.87,3]]},forecast:{total:0,by:[]}},
+      lastQ:{actual:{total:5608202.86,by:[["Connor Mitchell",4200000,2],["Larson Rubie",1039109.99,6],["Royce Morton",191192.87,5],["Denver Melvin",177900,1]]},forecast:{total:0,by:[]}}
+    }
   }
-  return `<div class="card"><div class="label">${label}${pill}</div>
-    <div class="val">${isMoney?gbp(value):num(value)}</div>${tgt}${bar}</div>`;
+};
+const PEOPLE=[{id:KYLE,name:"Kyle Glanfield"},{id:FLYNN,name:"Flynn Thomas"}];
+const BDPEOPLE=[{id:LR,name:"Larson Rubie"},{id:RO,name:"Royce Morton"}];
+const ROCK_OWNERS=[{id:KYLE,name:"Kyle Glanfield",team:"Lead Gen"},{id:RO,name:"Royce Morton",team:"BD"},{id:LR,name:"Larson Rubie",team:"BD"},{id:FLYNN,name:"Flynn Thomas",team:"Lead Gen"}];
+let G="month", O=0, view="huddle", ME={name:"",team:"management",role:"member",is_rock_owner:false};
+
+const full=v=>"£"+Number(v||0).toLocaleString("en-GB",{maximumFractionDigits:0});
+const comp=v=>{v=Number(v||0);const n=Math.abs(v);return (v<0?"-":"")+(n>=1e6?"£"+(n/1e6).toFixed(n>=1e7?1:2)+"m":n>=1e3?"£"+Math.round(n/1e3)+"k":"£"+Math.round(n));};
+const num=v=>Number(v||0).toLocaleString("en-GB");
+const sgn=(v,m)=>(v>=0?"+":"−")+(m?comp(Math.abs(v)):num(Math.abs(Math.round(v))));
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const initials=n=>String(n||"?").split(" ").filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+const ymd=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+function boundsFor(g,off){const now=new Date();let s,e;
+  if(g==="week"){const d=(now.getDay()+6)%7;s=new Date(now);s.setDate(now.getDate()-d+off*7);e=new Date(s);e.setDate(s.getDate()+6);}
+  else if(g==="month"){s=new Date(now.getFullYear(),now.getMonth()+off,1);e=new Date(now.getFullYear(),now.getMonth()+off+1,0);}
+  else{const q=Math.floor(now.getMonth()/3)+off;s=new Date(now.getFullYear(),q*3,1);e=new Date(now.getFullYear(),q*3+3,0);}
+  s.setHours(0,0,0,0);e.setHours(0,0,0,0);return{s,e,now};}
+function labelFor(g,off){const {s,e}=boundsFor(g,off);
+  if(g==="week")return off===0?"This week":off===-1?"Last week":`${s.toLocaleDateString("en-GB",{day:"numeric",month:"short"})} – ${e.toLocaleDateString("en-GB",{day:"numeric",month:"short"})}`;
+  if(g==="month")return off===0?"This month":s.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+  return (off===0?"This quarter · ":"")+"Q"+(Math.floor(s.getMonth()/3)+1)+" "+s.getFullYear();}
+function periodWord(){return G==="week"?(O===0?"this week":labelFor("week",O)):G==="month"?(O===0?"this month":labelFor("month",O)):(O===0?"this quarter":labelFor("quarter",O));}
+function wd(a,b){if(b<a)return 0;let n=0;const d=new Date(a);while(d<=b){const w=d.getDay();if(w!==0&&w!==6)n++;d.setDate(d.getDate()+1);}return n;}
+function lgKey(){return G==="week"?(O===0?"W":"lastW"):G==="month"?(O===0?"M":"lastM"):(O===0?"Q":"lastQ");}
+function monthKey(){const off=G==="month"?O:0;return off===0?"M":"lastM";}
+function quarterKey(){const off=G==="quarter"?O:0;return off===0?"Q":"lastQ";}
+function bonusKey(){return O===0?"M":"lastM";}
+function perDay(k,scope,tt){const m=boundsFor("month",0);
+  if(k==="booked"&&tt==="lg")return scope==="team"?16/5:8/5;
+  if(k==="held"&&tt==="bd")return scope==="team"?12/5:6/5;
+  if(k==="oppys"&&tt==="lg"&&scope==="team")return 15.6e6/wd(m.s,m.e);
+  return null;}
+function pace(k,scope,actual,tt){const pd=perDay(k,scope,tt);if(!pd)return null;
+  const {s,e,now}=boundsFor(G,O),t=wd(s,e),el=Math.max(1,wd(s,new Date(Math.min(now.getTime(),e.getTime()))));
+  const target=pd*t,expected=pd*el,gap=actual-expected;let cls,txt;
+  if(actual>=expected*1.05){cls="good";txt="Ahead";}else if(actual>=expected*0.9){cls="warn";txt="On track";}else{cls="bad";txt="Behind";}
+  return{target,expected,gap,cls,txt,pct:Math.min(100,actual/target*100),mark:Math.min(100,expected/target*100)};}
+
+const IC={
+  booked:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>',
+  held:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4M8.5 14.5l2.2 2.2 4-4.2"/></svg>',
+  outbound:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/></svg>',
+  connected:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3l6 6M21 3l-6 6"/><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/></svg>',
+  oppys:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 5.5C16 4 14 3.2 12 3.2 8.5 3.2 7 5.5 7 8c0 3.5 1 5 1 8 0 1.4-.6 2.5-1.6 3.3H18M7 12h6"/></svg>',
+  hand:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l6 6L20 6"/></svg>'};
+const CHEV='<svg class="chev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>';
+const METRICS=[{k:"booked",label:"Meetings booked",money:false},{k:"held",label:"Meetings held",money:false},{k:"outbound",label:"Outbound calls",money:false},{k:"connected",label:"Connected calls",money:false},{k:"oppys",label:"Oppys generated",money:true}];
+const TIERS=[[2850000,10],[3000000,20],[3300000,30],[3750000,40],[4350000,50],[5100000,60],[6000000,100]];
+function bonusTier(total){let idx=-1;for(let i=0;i<TIERS.length;i++){if(total>=TIERS[i][0])idx=i;}return {pct:idx>=0?TIERS[idx][1]:0,idx,next:idx+1<TIERS.length?TIERS[idx+1]:null};}
+function genBreakdown(opps){const g={};for(const o of opps){const x=g[o[4]]||(g[o[4]]={name:o[3],gid:o[4],ct:0,s:0});x.ct++;x.s+=o[7];}return Object.values(g).sort((a,b)=>b.s-a.s);}
+function gensOf(key){const d=SNAP.lg[key];return d.opps?genBreakdown(d.opps):(d.gens||[]).map(g=>({name:g[0],gid:g[1],ct:g[2],s:g[3]}));}
+
+function kpi(m,value,scope,who,tt){
+  const p=pace(m.k,scope,value,tt);let tag=`<span class="tag none">no target</span>`,sub="",tr="";
+  if(p){tag=`<span class="tag ${p.cls}">${p.txt} ${sgn(p.gap,m.money)}</span>`;
+    sub=`<div class="ksub"><span>Target <b>${m.money?comp(p.target):num(Math.round(p.target))}</b></span><span>Pace <b>${m.money?comp(p.expected):num(Math.round(p.expected))}</b></span></div>`;
+    const fc=p.cls==="good"?"var(--good)":p.cls==="bad"?"var(--bad)":"var(--warn)";
+    tr=`<div class="track"><div class="fill" style="width:${p.pct}%;background:${fc}"></div><div class="pin" style="left:${p.mark}%"></div></div>`;}
+  return `<div class="kpi" data-m="${m.k}" data-scope="${scope}" data-who="${who||''}"><div class="krow"><div class="ki">${IC[m.k]}</div><div class="klab">${m.label}</div>${tag}${CHEV}</div><div class="kval">${m.money?comp(value):num(value)}</div>${sub}${tr}</div>`;
+}
+function stat(icon,label,val,attrs,money){return `<div class="kpi ${attrs?'':'flat'}" ${attrs||''}><div class="krow"><div class="ki">${icon}</div><div class="klab">${label}</div>${attrs?CHEV:''}</div><div class="kval">${money?comp(val):num(val)}</div></div>`;}
+function handKpi(label,val,target,kind){
+  const pct=target?Math.min(100,Math.round(val/target*100)):0,hit=val>=target,cls=hit?"good":(val>=target*0.7?"warn":"bad"),txt=hit?"Ahead":(val>=target*0.7?"On track":"Behind");
+  const fc=hit?"var(--good)":(cls==="warn"?"var(--warn)":"var(--bad)");
+  const tag=target?`<span class="tag ${cls}">${txt} ${sgn(val-target,true)}</span>`:`<span class="tag none">actual</span>`;
+  const sub=target?`<div class="ksub"><span>Target <b>${comp(target)}</b></span><span>${pct}%</span></div><div class="track"><div class="fill" style="width:${pct}%;background:${fc}"></div></div>`:"";
+  return `<div class="kpi" data-m="handover" data-kind="${kind}"><div class="krow"><div class="ki">${IC.hand}</div><div class="klab">${label}</div>${tag}${CHEV}</div><div class="kval">${comp(val)}</div>${sub}</div>`;
+}
+function prow(m,value,scope,who,tt){const p=pace(m.k,scope,value,tt);
+  const st=p?`<span class="st" style="background:var(--${p.cls==='good'?'good-bg':p.cls==='bad'?'bad-bg':'warn-bg'});color:var(--${p.cls})">${p.txt}</span>`:"";
+  return `<div class="pr-row" data-m="${m.k}" data-scope="${scope}" data-who="${who}"><div class="l">${m.label}</div>${st}<div class="v">${m.money?comp(value):num(value)}</div><div class="cx">›</div></div>`;}
+
+function paceSimple(actual,bounds,target,opts){
+  opts=opts||{};const money=!!opts.money;
+  const {s,e,now}=bounds,totWd=Math.max(1,wd(s,e));
+  const days=[];for(let d=new Date(s);d<=e;d.setDate(d.getDate()+1))days.push(new Date(d));
+  const n=days.length;let ti=days.findIndex(d=>ymd(d)===ymd(now));if(ti<0)ti=now>e?n-1:0;
+  const frac=Math.min(1,wd(s,days[ti])/totWd),expToday=target*frac,gap=actual-expToday,gcol=gap>=0?'var(--good)':'var(--bad)';
+  const fmt=v=>money?comp(v):num(Math.round(v));
+  const gtxt=(gap>=0?'+':'−')+(money?comp(Math.abs(gap)):num(Math.abs(Math.round(gap))));
+  const W2=720,H=150,pad=6,maxV=Math.max(target,actual)||1,X=f=>pad+f*(W2-2*pad),Y=v=>pad+(1-v/maxV)*(H-2*pad);
+  const tX=X(n<=1?0:ti/(n-1)),actY=Y(actual).toFixed(1);
+  return `<div class="trk"><div class="cap"><div>Should be by today<b>${fmt(expToday)}</b></div><div>${opts.actualLabel||'Actual'}<b style="color:${gcol}">${fmt(actual)}</b></div><div>Gap<b style="color:${gcol}">${gtxt}</b></div><div>Target<b>${fmt(target)}</b></div></div>
+    <svg viewBox="0 0 ${W2} ${H}" width="100%" height="150" preserveAspectRatio="none" style="display:block;margin-top:6px">
+      <path d="M${X(0)} ${actY} L${X(1).toFixed(1)} ${actY} L${X(1).toFixed(1)} ${Y(0)} L${X(0)} ${Y(0)} Z" fill="var(--brand-soft)"/>
+      <path d="M${X(0)} ${Y(0)} L${X(1).toFixed(1)} ${Y(target).toFixed(1)}" fill="none" stroke="var(--muted-2)" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="${X(0)}" y1="${actY}" x2="${X(1).toFixed(1)}" y2="${actY}" stroke="var(--brand)" stroke-width="2.5"/>
+      <line x1="${tX.toFixed(1)}" y1="${pad}" x2="${tX.toFixed(1)}" y2="${H-pad}" stroke="var(--navy)" stroke-width="1" stroke-dasharray="2 3" opacity=".5"/>
+    </svg>
+    <div class="lgd"><span><i style="background:var(--brand)"></i> ${opts.actualLabel||'Actual'} (to date)</span><span><i style="background:var(--muted-2)"></i> Required pace${opts.targetLabel?(' to '+opts.targetLabel):''}</span><span>│ today</span></div></div>`;
 }
 
-/* ============================================================
-   LEAD GEN DASHBOARD
-   ============================================================ */
-const LG_METRICS=[['meetings_booked','Meetings booked',false],['meetings_held','Meetings held',false],
-  ['outbound_calls','Outbound calls',false],['connected_calls','Connected calls',false],
-  ['oppys_created','Oppys generated (£)',true]];
+function renderLeadGen(){
+  const key=lgKey(),d=SNAP.lg[key],team=d.team,gens=gensOf(key),hasOpps=!!d.opps;
+  let ahead=0,ont=0,behind=0;for(const m of METRICS){const p=pace(m.k,"team",team[m.k],"lg");if(!p)continue;if(p.cls==="good")ahead++;else if(p.cls==="warn")ont++;else behind++;}
+  const {s,e,now}=boundsFor(G,O),el=wd(s,new Date(Math.min(now.getTime(),e.getTime()))),tot=wd(s,e);
+  const overall=behind>0?`<span style="color:var(--bad)">Behind on ${behind}</span>`:`<span style="color:var(--good)">On track across the board</span>`;
+  const teamOppys=gens.reduce((a,g)=>a+g.s,0),teamCt=hasOpps?d.opps.length:gens.reduce((a,g)=>a+g.ct,0),lg=new Set([KYLE,FLYNN]),max=Math.max(1,...gens.map(g=>g.s));
+  let html=`<div class="bar"><div class="lead">Team pace · ${periodWord()} ${overall}</div><div class="chips"><span class="chip acc"><b>${el}/${tot}</b> working days</span><span class="chip good"><b>${ahead}</b> ahead</span><span class="chip"><b>${ont}</b> on track</span><span class="chip bad"><b>${behind}</b> behind</span></div></div>`;
+  html+=`<div class="sec">Team<span class="rule"></span></div><div class="kpis">`+METRICS.map(m=>kpi(m,team[m.k],"team","","lg")).join("")+`</div>`;
+  const wkKey=G==="week"?lgKey():"W",wkB=boundsFor("week",G==="week"?O:0),moKey2=monthKey(),moB2=boundsFor("month",G==="month"?O:0);
+  html+=`<div class="sec">Meetings booked — pace ${labelFor("week",G==="week"?O:0).toLowerCase()}<span class="rule"></span></div>${paceSimple(SNAP.lg[wkKey].team.booked,wkB,16,{actualLabel:'Booked',targetLabel:'16 this week'})}`;
+  html+=`<div class="sec">Oppys generated — pace this month<span class="rule"></span></div>${paceSimple(SNAP.lg[moKey2].team.oppys,moB2,15.6e6,{money:true,actualLabel:'Oppys',targetLabel:'£15.6m'})}`;
+  html+=`<div class="sec">By person<span class="rule"></span></div><div class="people">`+PEOPLE.map(p=>{const pm=d.people[p.id]||{};return `<div class="pc-c"><div class="ph"><div class="ava">${initials(p.name)}</div><div><div class="pn">${esc(p.name)}</div><div class="pr">Lead Gen</div></div></div>`+METRICS.map(m=>prow(m,pm[m.k]||0,"person",p.id,"lg")).join("")+`</div>`;}).join("")+`</div>`;
+  html+=`<div class="sec">Oppys — every generator<span class="rule"></span></div><div class="board"><div class="bh"><h3>Full breakdown · ${periodWord()}</h3><span class="tot">${full(teamOppys)} · ${num(teamCt)} opps</span></div>`
+    +gens.map((g,i)=>`<div class="row ${hasOpps?'click':''}" ${hasOpps?`data-m="oppys" data-scope="gen" data-who="${g.gid}"`:''}><div class="rk">${i+1}</div><div><div class="who"><div class="av2 ${lg.has(g.gid)?'hl':''}">${initials(g.name)}</div><div class="nm">${esc(g.name)}${lg.has(g.gid)?'<span class="tg">LG</span>':''}</div></div><div class="minibar"><i style="width:${Math.round(g.s/max*100)}%"></i></div></div><div class="rc">${num(g.ct)} opp${g.ct===1?'':'s'}</div><div class="rv">${full(g.s)}</div></div>`).join("")
+    +`<div class="row total"><div class="rk">Σ</div><div class="who"><div class="av2 hl">T</div><div class="nm">Team total</div></div><div class="rc">${num(teamCt)}</div><div class="rv">${full(teamOppys)}</div></div></div>`;
+  html+=`<div class="note">Click any tile to drill in. ${hasOpps?"Opportunities open their full list; ":""}calls & meetings open the source Salesforce report. Oppys = Health Care sector, stages 00–12, not junior, not framework, by Lead Generator (Pure Annualised Amount). Snapshot ${esc(SNAP.generatedAt)}.</div>`;
+  paint(true,html);
+}
+function renderBD(){
+  const hm=SNAP.bd.handover[monthKey()],hq=SNAP.bd.handover[quarterKey()],mt=SNAP.bd.meetings[lgKey()];
+  const aM=hm.actual.total,fM=hm.forecast.total,aQ=hq.actual.total,fQ=hq.forecast.total,heldTeam=mt[LR].held+mt[RO].held,bookTeam=mt[LR].booked+mt[RO].booked;
+  let html=`<div class="bar"><div class="lead">Handovers to CR</div><div class="chips"><span class="chip ${aM>=3e6?'good':'bad'}"><b>${comp(aM)}</b> handed (mo)</span><span class="chip acc"><b>${comp(aM+fM)}</b> forecast (mo)</span><span class="chip"><b>${comp(aQ)}</b> handed (qtr)</span></div></div>`;
+  html+=`<div class="sec">Daily handover tracker · ${labelFor("month",G==="month"?O:0)}<span class="rule"></span></div>${paceSimple(aM,boundsFor("month",G==="month"?O:0),3e6,{money:true,actualLabel:'Actual handed',targetLabel:'£3m'})}`;
+  html+=`<div class="sec">Actual handed over<span class="rule"></span></div><div class="kpis">`+handKpi("Handed · this month",aM,3e6,"actual-month")+handKpi("Handed · this quarter",aQ,9e6,"actual-quarter")+`</div>`;
+  html+=`<div class="sec">Forecast still to hand over<span class="rule"></span></div><div class="kpis">`+handKpi("Forecast pipeline · this month",fM,0,"forecast-month")+handKpi("Forecast pipeline · this quarter",fQ,0,"forecast-quarter")+`</div>`;
+  html+=`<div class="sec">Meetings · ${periodWord()}<span class="rule"></span></div><div class="kpis">`+stat(IC.booked,"Meetings booked — team",bookTeam,'data-m="booked" data-scope="team"')+kpi({k:"held",label:"Meetings held — team",money:false},heldTeam,"team","","bd")+`</div>`;
+  html+=`<div class="people">`+BDPEOPLE.map(p=>`<div class="pc-c"><div class="ph"><div class="ava">${initials(p.name)}</div><div><div class="pn">${esc(p.name)}</div><div class="pr">Business Development</div></div></div>`+prow({k:"booked",label:"Meetings booked",money:false},mt[p.id].booked,"person",p.id,"bd")+prow({k:"held",label:"Meetings held",money:false},mt[p.id].held,"person",p.id,"bd")+`</div>`).join("")+`</div>`;
+  html+=`<div class="note"><b>Actual</b> = deals crossed stage 4→5 (handed to CR). <b>Forecast</b> = deals still at stages 00–04 dated this period. Handover target £3m/month; meetings-held target 6/person/week (12 team). Handover tiles open the Salesforce report; meetings open the source report. Snapshot ${esc(SNAP.generatedAt)}.</div>`;
+  paint(true,html);
+}
+function renderMgmt(){
+  const key=lgKey(),d=SNAP.lg[key],team=d.team,hm=SNAP.bd.handover[monthKey()],mt=SNAP.bd.meetings[key],aM=hm.actual.total,fM=hm.forecast.total,bt=bonusTier(aM);
+  const byN=(o,n)=>{const r=o.find(x=>x[0]===n);return r?r[1]:0;};
+  let html=`<div class="bar"><div class="lead">Management overview · ${periodWord()}</div><div class="chips"><span class="chip acc"><b>${comp(team.oppys)}</b> LG oppys</span><span class="chip ${aM>=3e6?'good':'bad'}"><b>${comp(aM)}</b> handed (mo)</span><span class="chip"><b>${bt.pct}%</b> bonus</span></div></div>`;
+  const mgB=boundsFor("month",G==="month"?O:0);
+  html+=`<div class="sec">Oppys generated — pace this month<span class="rule"></span></div>${paceSimple(SNAP.lg[monthKey()].team.oppys,mgB,15.6e6,{money:true,actualLabel:'Oppys',targetLabel:'£15.6m'})}`;
+  html+=`<div class="sec">Handovers to CR — pace this month<span class="rule"></span></div>${paceSimple(aM,mgB,3e6,{money:true,actualLabel:'Handed',targetLabel:'£3m'})}`;
+  html+=`<div class="sec">Lead Gen — team<span class="rule"></span></div><div class="kpis">`+METRICS.map(m=>kpi(m,team[m.k],"team","","lg")).join("")+`</div>`;
+  html+=`<div class="sec">BD — handovers &amp; meetings<span class="rule"></span></div><div class="kpis">`+handKpi("Handed to CR · this month",aM,3e6,"actual-month")+handKpi("Forecast to hand · this month",fM,0,"forecast-month")+stat(IC.booked,"BD meetings booked — team",mt[LR].booked+mt[RO].booked,'data-m="booked" data-scope="team"')+kpi({k:"held",label:"BD meetings held — team",money:false},mt[LR].held+mt[RO].held,"team","","bd")+`</div>`;
+  html+=`<div class="sec">Lead Gen — by person<span class="rule"></span></div><div class="people">`+PEOPLE.map(p=>{const pm=d.people[p.id]||{};return `<div class="pc-c"><div class="ph"><div class="ava">${initials(p.name)}</div><div><div class="pn">${esc(p.name)}</div><div class="pr">Lead Gen</div></div></div>`+METRICS.map(m=>prow(m,pm[m.k]||0,"person",p.id,"lg")).join("")+`</div>`;}).join("")+`</div>`;
+  html+=`<div class="sec">BD — by person<span class="rule"></span></div><div class="people">`+BDPEOPLE.map(p=>`<div class="pc-c"><div class="ph"><div class="ava">${initials(p.name)}</div><div><div class="pn">${esc(p.name)}</div><div class="pr">Business Development</div></div></div><div class="pr-row" style="cursor:default"><div class="l">Handed to CR (mo)</div><div class="v">${comp(byN(hm.actual.by,p.name))}</div></div>`+prow({k:"booked",label:"Meetings booked",money:false},mt[p.id].booked,"person",p.id,"bd")+prow({k:"held",label:"Meetings held",money:false},mt[p.id].held,"person",p.id,"bd")+`</div>`).join("")+`</div>`;
+  html+=`<div class="note">Combined Lead Gen + BD snapshot for ${periodWord()}. Handovers &amp; bonus are monthly; bonus is on actual handed. Snapshot ${esc(SNAP.generatedAt)}.</div>`;
+  paint(true,html);
+}
+function renderBonus(){
+  const h=SNAP.bd.handover[bonusKey()],actual=h.actual.total,forecast=actual+h.forecast.total,bA=bonusTier(actual),bF=bonusTier(forecast),toNextA=bA.next?bA.next[0]-actual:0;
+  const monthName=labelFor("month",O)==="This month"?"This month":labelFor("month",O);
+  const ladder=total=>`<div style="margin-top:6px">`+TIERS.map(t=>{const r=total>=t[0];return `<div class="lad"><div class="lp" style="color:${r?'var(--good)':'var(--muted-2)'}">${t[1]}%</div><div class="lt"><i style="width:${Math.min(100,total/t[0]*100)}%;background:${r?'var(--good)':'var(--brand)'}"></i></div><div class="lv" style="color:${r?'var(--ink)':'var(--muted)'}">${comp(t[0])}</div><div class="lc">${r?'✓':''}</div></div>`;}).join("")+`</div>`;
+  const rowsBlock=(arr,cls)=>arr.length?arr.slice().sort((a,b)=>b[1]-a[1]).map((r,i)=>`<div class="row"><div class="rk">${i+1}</div><div class="who"><div class="av2 ${cls}">${initials(r[0])}</div><div class="nm">${esc(r[0])}</div></div><div class="rc">${num(r[2])} deal${r[2]===1?'':'s'}</div><div class="rv">${full(r[1])}</div></div>`).join(""):`<div class="empty">None this month.</div>`;
+  let html=`<div class="bar"><div class="lead">${monthName} · bonus on actual handovers</div><div class="chips"><span class="chip good"><b>${bA.pct}%</b> unlocked (actual)</span><span class="chip acc"><b>${bF.pct}%</b> if forecast lands</span>${bA.next?`<span class="chip bad"><b>${full(toNextA)}</b> to ${bA.next[1]}%</span>`:`<span class="chip good"><b>Top tier</b></span>`}</div></div>`;
+  html+=`<div class="two" style="margin-top:16px"><div class="gauge"><div class="cap">Bonus unlocked · actual handed over</div><div class="pct">${bA.pct}<small>%</small></div><div class="expl">${full(actual)} handed to CR${bA.next?` · <b>${full(toNextA)}</b> more to reach ${bA.next[1]}%`:' · top tier reached'}</div>${ladder(actual)}</div><div class="gauge"><div class="cap">Forecast · if the pipeline lands</div><div class="pct" style="color:var(--brand)">${bF.pct}<small>%</small></div><div class="expl">${full(forecast)} total forecast to hand over (actual + pipeline)</div>${ladder(forecast)}</div></div>`;
+  html+=`<div class="sec">Handed over — actual<span class="rule"></span></div><div class="board"><div class="bh"><h3>Deals handed to CR</h3><span class="tot">${full(actual)}</span></div>${rowsBlock(h.actual.by,'hl')}</div>`;
+  html+=`<div class="sec">Forecast to hand over — pipeline<span class="rule"></span></div><div class="board"><div class="bh"><h3>Still at stages 00–04 dated this month</h3><span class="tot">${full(h.forecast.total)}</span></div>${rowsBlock(h.forecast.by,'')}</div>`;
+  html+=`<div class="note"><b>Bonus is paid on actual handovers</b> — deals crossed stage 4→5 with a CR Handover Date in the month. Forecast shows where it lands if the whole pipeline hands over. Tiers £2.85m=10% … £6.0m=100%, highest at or below the team total. No salaries stored. Team excl. Connor &amp; Hans. Snapshot ${esc(SNAP.generatedAt)}.</div>`;
+  paint(false,html);
+}
+function renderHuddle(){
+  const w=SNAP.lg.W,team=w.team,gens=genBreakdown(w.opps),h=SNAP.bd.handover.M,mw=SNAP.bd.meetings.W;
+  const aM=h.actual.total,fM=aM+h.forecast.total,bt=bonusTier(aM),toNext=bt.next?bt.next[0]-aM:0;
+  const today=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const lg=new Set([KYLE,FLYNN]),max=Math.max(1,...gens.map(g=>g.s)),bookHit=team.booked>=16;
+  const H=[];
+  h.actual.by.forEach(r=>H.push({c:'var(--good)',bg:'var(--good-bg)',ic:IC.hand,t:`Handed to CR — ${esc(r[0])}`,s:`${r[2]} deal${r[2]===1?'':'s'} this month`,v:comp(r[1])}));
+  gens.slice(0,3).forEach(g=>H.push({c:'var(--brand)',bg:'var(--brand-soft)',ic:IC.oppys,t:`New oppys — ${esc(g.name)}`,s:`${g.ct} opportunit${g.ct===1?'y':'ies'} this week`,v:comp(g.s)}));
+  h.forecast.by.slice(0,2).forEach(r=>H.push({c:'var(--brand)',bg:'var(--brand-soft)',ic:IC.hand,t:`Moving to CR (forecast) — ${esc(r[0])}`,s:`${r[2]} deal${r[2]===1?'':'s'} in pipeline`,v:comp(r[1])}));
+  const feed=H.length?H.slice(0,10).map(x=>`<div class="hi"><div class="hicon" style="background:${x.bg};color:${x.c}">${x.ic}</div><div class="ht">${x.t}<small>${x.s}</small></div>${x.v?`<div class="hv">${x.v}</div>`:''}</div>`).join(""):`<div class="empty">No standout activity yet.</div>`;
+  const _G=G,_O=O;G="week";O=0;
+  let html=`<div class="bar"><div class="lead">${today}</div><div class="chips"><span class="chip ${bookHit?'good':'bad'}"><b>${team.booked}</b>/16 booked</span><span class="chip ${aM>=3e6?'good':'bad'}"><b>${comp(aM)}</b>/£3m handed</span><span class="chip acc"><b>${bt.pct}%</b> bonus</span></div></div>`;
+  html+=`<div class="sec">Highlights · this week<span class="rule"></span></div><div class="hl">${feed}</div>`;
+  html+=`<div class="sec">Lead Gen — this week<span class="rule"></span></div><div class="kpis">`+kpi(METRICS[0],team.booked,"team","","lg")+stat(IC.held,"Meetings held — team",team.held,'data-m="held" data-scope="team"')+stat(IC.outbound,"Outbound calls — team",team.outbound,'data-m="outbound" data-scope="team"')+stat(IC.connected,"Connected calls — team",team.connected,'data-m="connected" data-scope="team"')+kpi(METRICS[4],team.oppys,"team","","lg")+`</div>`;
+  G=_G;O=_O;
+  html+=`<div class="sec">BD — month to date<span class="rule"></span></div><div class="kpis">`+handKpi("Handed to CR · this month",aM,3e6,"actual-month")+handKpi("Forecast to hand · this month",fM-aM,0,"forecast-month")+`</div>`;
+  html+=`<div class="sec">Bonus position<span class="rule"></span></div><div class="gauge" style="display:flex;align-items:center;gap:26px;flex-wrap:wrap"><div><div class="cap">Actual · this month</div><div class="pct" style="font-size:46px">${bt.pct}<small>%</small></div></div><div style="flex:1;min-width:220px"><div class="lt" style="height:10px;border-radius:6px;background:var(--line);overflow:hidden"><i style="display:block;height:100%;width:${Math.min(100,aM/6e6*100)}%;background:var(--brand)"></i></div><div class="expl" style="margin-top:9px">${full(aM)} handed to CR${bt.next?` · <b>${full(toNext)}</b> more to reach ${bt.next[1]}%`:' · top tier reached'} · forecast ${comp(fM)}</div></div></div>`;
+  html+=`<div class="sec">Top oppys — this week<span class="rule"></span></div><div class="board"><div class="bh"><h3>Leaderboard</h3><span class="tot">${full(gens.reduce((a,g)=>a+g.s,0))} · ${num(w.opps.length)} opps</span></div>`+gens.slice(0,8).map((g,i)=>`<div class="row click" data-m="oppys" data-scope="gen" data-who="${g.gid}" data-hp="W"><div class="rk">${i+1}</div><div><div class="who"><div class="av2 ${lg.has(g.gid)?'hl':''}">${initials(g.name)}</div><div class="nm">${esc(g.name)}${lg.has(g.gid)?'<span class="tg">LG</span>':''}</div></div><div class="minibar"><i style="width:${Math.round(g.s/max*100)}%"></i></div></div><div class="rc">${num(g.ct)} opp${g.ct===1?'':'s'}</div><div class="rv">${full(g.s)}</div></div>`).join("")+`</div>`;
+  html+=`<div class="note">Fresh each morning. Highlights show deals handed to CR, new oppys and pipeline moving to CR. Lead Gen is this week; BD handovers &amp; bonus are month to date on actual handed-over deals.</div>`;
+  paint(false,html);
+}
 
-async function viewLeadGen(){
-  renderShell(`<h1>Lead Gen</h1><div class="sub">Kyle &amp; Flynn · vs target</div>${periodToggle()}
-    <div id="lg">Loading…</div>`);
-  wirePeriod();
-  // profiles for labels
-  if(!lgProfiles.length){ lgProfiles = await SB.rest(`profile?team=eq.lead_gen&select=full_name,sf_user_id`)||[]; }
-  const rows = await SB.rest(`metric_latest?period_type=eq.${period}&select=metric,sf_user_id,value,period_start`) || [];
-  const targets = await SB.rest(`target?team=eq.lead_gen&period=eq.${period}&select=metric,scope,value`) || [];
-  const box=document.getElementById('lg');
-  if(!rows.length){ box.innerHTML=`<div class="empty">No data yet — the Salesforce sync hasn't run for this ${period}.<br/>Once the 4×/day pull runs, live numbers appear here.</div>`; return; }
-  const latest = rows.reduce((m,r)=>r.period_start>m?r.period_start:m,''); // current period
-  const cur = rows.filter(r=>r.period_start===latest);
-  const get=(metric,sf)=>{const r=cur.find(x=>x.metric===metric && (sf?x.sf_user_id===sf:!x.sf_user_id)); return r?Number(r.value):0;};
-  const tgt=(metric,scope)=>{const t=targets.find(x=>x.metric===metric&&x.scope===scope); return t?Number(t.value):null;};
-
-  let html='';
-  // per person
-  for(const p of lgProfiles){
-    html+=`<div class="group"><h2>${p.full_name}</h2><div class="cards">`;
-    for(const [m,label,money] of LG_METRICS)
-      html+=card(label,get(m,p.sf_user_id),money, tgt(m,'person'));
-    html+=`</div></div>`;
+/* Rocks (live via Supabase, 3 shown, up to 5) */
+let RC={profiles:[],rocks:[],notifs:[]};
+async function loadRocks(){const today=ymd(new Date());
+  const [profiles,rocks,notifs]=await Promise.all([SB.rest(`profile?select=user_id,full_name,is_rock_owner`),SB.rest(`rock?select=*&rock_date=eq.${today}`),SB.rest(`notification?select=*&order=created_at.desc&limit=20`)]);
+  RC={profiles:profiles||[],rocks:rocks||[],notifs:notifs||[]};}
+function uidForName(n){const p=RC.profiles.find(x=>x.full_name===n);return p?p.user_id:null;}
+let myShown=3;
+async function renderRocks(){
+  document.getElementById("out").innerHTML=`<div class="empty">Loading the board…</div>`;
+  try{await loadRocks();}catch(e){document.getElementById("out").innerHTML=`<div class="board"><div class="empty" style="color:var(--bad)">Couldn't load Rocks: ${esc(e.message)}</div></div>`;return;}
+  const todayLabel=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+  const byUser={};for(const r of RC.rocks){(byUser[r.user_id]=byUser[r.user_id]||{})[r.position]=r;}
+  let posted=0,doneAll=0;
+  const cards=ROCK_OWNERS.map(o=>{const uid=uidForName(o.name),rs=uid?byUser[uid]||{}:{};
+    const filled=[1,2,3,4,5].filter(i=>rs[i]&&rs[i].text),has=filled.length,dn=filled.filter(i=>rs[i].done).length;
+    if(has>=3)posted++;if(has>0&&dn===has)doneAll++;const isMe=uid&&uid===SB.uid;
+    const status=has===0?'<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--bg);color:var(--muted)">Not posted</span>':(dn===has?'<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--good-bg);color:var(--good)">All done ✓</span>':`<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--brand-soft);color:var(--brand)">${dn}/${has} done</span>`);
+    let body;
+    if(isMe){const n=Math.max(3,myShown,has);const rowsN=Math.min(5,n);
+      let rowsHtml="";for(let i=1;i<=rowsN;i++){const r=rs[i]||{};rowsHtml+=`<div class="rockrow"><div class="cb ${r.done?'on':''}" data-done="${i}">${r.done?'✓':''}</div><input class="ri" data-pos="${i}" placeholder="Rock ${i}${i>3?' (optional)':''}…" value="${esc(r.text||'')}"/></div>`;}
+      body=rowsHtml+`<div class="rockfoot">${rowsN<5?`<button class="radd" id="radd">+ Add rock</button>`:''}<button class="rsave" id="rsave">Save</button></div>`;
+    }else{let rowsHtml="";const cnt=Math.max(3,has);for(let i=1;i<=cnt;i++){const r=rs[i]||{};rowsHtml+=`<div class="rockrow"><div class="cb ${r.done?'on':''}">${r.done?'✓':''}</div><div class="rt ${r.done?'done':''}">${r.text?esc(r.text):'<span style="color:var(--muted-2)">—</span>'}</div></div>`;}body=rowsHtml;}
+    return `<div class="rockcard ${isMe?'me':''}"><div class="ph"><div class="ava">${initials(o.name)}</div><div><div class="pn">${esc(o.name)}${isMe?' <span class="tg">you</span>':''}</div><div class="pr">${o.team}</div></div><div style="margin-left:auto">${status}</div></div>${body}</div>`;}).join("");
+  const feed=RC.notifs.length?RC.notifs.map(n=>`<div class="fitem"><div class="fdot" style="background:${n.type==='rocks_completed'?'var(--good)':'var(--brand)'}"></div><div class="ft">${esc(n.message)}</div><div class="fw">${new Date(n.created_at).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}</div></div>`).join(""):`<div class="empty">No notifications yet today.</div>`;
+  document.getElementById("out").innerHTML=`<div class="bar"><div class="lead">${todayLabel} · top priorities</div><div class="chips"><span class="chip acc"><b>${posted}</b>/4 posted</span><span class="chip good"><b>${doneAll}</b>/4 cleared</span></div></div>
+    <div class="sec">Today's board<span class="rule"></span></div><div class="people">${cards}</div>
+    <div class="sec">Notifications<span class="rule"></span></div><div class="board feed">${feed}</div>
+    <div class="note">Post your top 3 each morning (add up to 5) and tick them off. Everyone is notified when you post all 3 and when you clear them. Rock owners: Kyle, Royce, Larson, Flynn.</div>`;
+  const addBtn=document.getElementById("radd");if(addBtn)addBtn.onclick=()=>{myShown=Math.min(5,Math.max(3,myShown)+1);renderRocks();};
+  const saveBtn=document.getElementById("rsave");
+  if(saveBtn){
+    document.querySelectorAll('.cb[data-done]').forEach(cb=>cb.onclick=async()=>{const pos=+cb.dataset.done,inp=document.querySelector(`.ri[data-pos="${pos}"]`);
+      if(!inp.value.trim()){toast("Add the rock text first, then tick it.");return;}
+      cb.classList.toggle('on');cb.textContent=cb.classList.contains('on')?'✓':'';
+      try{await saveRock(pos,inp.value.trim(),cb.classList.contains('on'));await afterRock(false);}catch(e){toast("Save failed: "+e.message);}});
+    saveBtn.onclick=async()=>{saveBtn.disabled=true;saveBtn.textContent="Saving…";
+      try{const inps=document.querySelectorAll('.ri');for(const inp of inps){const i=+inp.dataset.pos,cb=document.querySelector(`.cb[data-done="${i}"]`);if(inp.value.trim())await saveRock(i,inp.value.trim(),cb.classList.contains('on'));}await afterRock(true);}
+      catch(e){toast("Save failed: "+e.message);saveBtn.disabled=false;saveBtn.textContent="Save";}};
   }
-  // team
-  html+=`<div class="group"><h2>Lead Gen — team</h2><div class="cards">`;
-  for(const [m,label,money] of LG_METRICS)
-    html+=card(label,get(m,null),money, tgt(m,'team'));
-  html+=`</div></div>`;
-  box.innerHTML=html;
+}
+async function saveRock(pos,text,done){await SB.rest(`rock?on_conflict=user_id,rock_date,position`,{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:{user_id:SB.uid,rock_date:ymd(new Date()),position:pos,text,done:!!done,done_at:done?new Date().toISOString():null}});}
+async function afterRock(fromSave){const today=ymd(new Date());
+  const mine=await SB.rest(`rock?select=*&user_id=eq.${SB.uid}&rock_date=eq.${today}`);
+  const filled=(mine||[]).filter(r=>r.text),posted=filled.length,done=filled.filter(r=>r.done).length;
+  const dayRows=await SB.rest(`rock_day?select=*&user_id=eq.${SB.uid}&rock_date=eq.${today}`),day=(dayRows&&dayRows[0])||{},nm=ME.name||SB.email;
+  if(fromSave&&posted>=3&&!day.submitted_at){await SB.rest(`rock_day?on_conflict=user_id,rock_date`,{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:{user_id:SB.uid,rock_date:today,submitted_at:new Date().toISOString(),completed_at:day.completed_at||null}});await notify('rocks_uploaded',`${nm} posted today's top priorities`);toast("Posted — team notified");}
+  if(posted>0&&done===posted&&!day.completed_at){await SB.rest(`rock_day?on_conflict=user_id,rock_date`,{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:{user_id:SB.uid,rock_date:today,submitted_at:day.submitted_at||new Date().toISOString(),completed_at:new Date().toISOString()}});await notify('rocks_completed',`${nm} cleared all their rocks`);toast("All cleared — nice work.");}
+  renderRocks();
+}
+async function notify(type,message){try{await SB.rest(`notification`,{method:'POST',headers:{Prefer:'return=minimal'},body:{type,actor:SB.uid,message}});}catch(e){}}
+let lastNotifId=+(localStorage.getItem('nhs_last_notif')||0);
+async function pollNotifs(){try{const rows=await SB.rest(`notification?select=id,message,actor&order=id.desc&limit=5`);if(rows&&rows.length){const newest=rows[0].id;if(lastNotifId&&newest>lastNotifId){for(const n of rows.filter(x=>x.id>lastNotifId).reverse()){if(n.actor!==SB.uid)toast(n.message);}}lastNotifId=newest;localStorage.setItem('nhs_last_notif',newest);}}catch(e){}}
+function toast(msg){const t=document.getElementById("toast");t.innerHTML=`<div class="toast"><span class="dot"></span><span>${esc(msg)}</span></div>`;clearTimeout(window._tt);window._tt=setTimeout(()=>t.innerHTML="",5000);}
+
+function drill(el){
+  const m=el.dataset.m,scope=el.dataset.scope,who=el.dataset.who,hp=el.dataset.hp;
+  if(m==="handover"){window.open(`${SFB}/lightning/r/Report/${RPT.handover}/view`,"_blank","noopener");return;}
+  if(m!=="oppys"){window.open(`${SFB}/lightning/r/Report/${(m==="booked"||m==="held")?RPT.meetings:RPT.calls}/view`,"_blank","noopener");return;}
+  const key=hp||lgKey(),d=SNAP.lg[key];if(!d.opps){window.open(`${SFB}/lightning/o/Report/home`,"_blank","noopener");return;}
+  let opps=d.opps.slice(),whoName="Team";
+  if(scope==="person"||scope==="gen"){opps=opps.filter(o=>o[4]===who);whoName=(opps[0]&&opps[0][3])||"Generator";}
+  const tot=opps.reduce((a,o)=>a+o[7],0),mo=document.getElementById("modal");
+  mo.innerHTML=`<div class="ov" id="ov"><div class="modal"><div class="mh"><div><div class="mt">Oppys generated</div><div class="ms">${esc(whoName)} · ${periodWord()}</div></div><button id="mc">✕</button></div><div class="msum"><div>Opportunities<b>${num(opps.length)}</b></div><div>Total value<b>${full(tot)}</b></div></div><div class="mb"><table><thead><tr><th>Opportunity</th><th>Account</th><th>Generator</th><th>Owner</th><th>Stage</th><th class="n">Value</th></tr></thead><tbody>`+opps.map(o=>`<tr><td><a href="${SFB}/lightning/r/Opportunity/${o[0]}/view" target="_blank" rel="noopener">${esc(o[1])} ↗</a></td><td>${esc(o[2])}</td><td>${esc(o[3])}</td><td>${esc(o[5])}</td><td>${esc(o[6])}</td><td class="n">${full(o[7])}</td></tr>`).join("")+`</tbody></table>${opps.length?"":'<div class="empty">No opportunities.</div>'}</div></div></div>`;
+  document.getElementById("mc").onclick=()=>mo.innerHTML="";document.getElementById("ov").onclick=e=>{if(e.target.id==="ov")mo.innerHTML="";};
 }
 
-/* ============================================================
-   PLACEHOLDER VIEWS (built next)
-   ============================================================ */
-function soon(title,note){ renderShell(`<h1>${title}</h1><div class="sub">${note}</div>
-  <div class="soon">This section is next on the build list. The data model and security for it are already in place.</div>`); }
+const NAVDEF=[{v:"huddle",g:"Overview",label:"Morning Huddle",ic:'<path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/>'},{v:"bonus",g:"Overview",label:"Bonus",ic:'<path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},{v:"leadgen",g:"Teams",label:"Lead Gen",ic:'<path d="M3 13h4v8H3zM10 3h4v18h-4zM17 9h4v12h-4z"/>'},{v:"bd",g:"Teams",label:"Business Dev",ic:'<path d="M4 7h16M4 12h16M4 17h10"/>'},{v:"mgmt",g:"Teams",label:"Management",ic:'<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-3.6 3.4-5.5 7.5-5.5s7.5 1.9 7.5 5.5"/>'},{v:"rocks",g:"Teams",label:"Key Rocks",ic:'<path d="M12 2l3 6 6 .5-4.5 4 1.5 6-6-3.5L6 18.5 7.5 12 3 8.5 9 8z"/>'}];
+function canSee(v){const t=ME.team,adm=ME.role==='admin'||ME.role==='manager';
+  if(v==="huddle"||v==="bonus")return true;
+  if(v==="leadgen")return t==='lead_gen'||t==='management'||adm;
+  if(v==="bd")return t==='bd'||t==='management'||adm;
+  if(v==="mgmt")return t==='management'||adm;
+  if(v==="rocks")return ME.is_rock_owner||t==='management'||adm;
+  return false;}
+function usesPeriod(){return view==="leadgen"||view==="bd"||view==="mgmt";}
+function usesStepper(){return view!=="rocks";}
+function paint(showSeg,html){document.getElementById("out").innerHTML=html;document.querySelectorAll("#out [data-m]").forEach(el=>el.onclick=()=>drill(el));}
+function syncControls(){document.getElementById("pc").style.visibility=usesStepper()?"visible":"hidden";document.getElementById("gran").style.display=usesPeriod()?"":"none";
+  document.getElementById("rng").textContent=labelFor(usesPeriod()?G:"month",O);document.getElementById("nextb").disabled=O>=0;
+  document.querySelectorAll("#gran button").forEach(b=>b.classList.toggle("active",b.dataset.g===G));}
+function route(){if(!canSee(view))view="huddle";
+  document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("active",a.dataset.v===view));
+  const titles={huddle:["Morning Huddle","Everything for the daily stand-up"],leadgen:["Lead Gen","Actual vs target · pace to date"],bd:["Business Development","Handovers to CR · actual & forecast"],mgmt:["Management","Lead Gen + BD overview"],bonus:["Bonus","Monthly bonus on actual handovers"],rocks:["Key Rocks","Daily top priorities"]};
+  document.getElementById("ptitle").textContent=titles[view][0];document.getElementById("psub").textContent=titles[view][1];syncControls();
+  if(view==="bd")renderBD();else if(view==="mgmt")renderMgmt();else if(view==="bonus")renderBonus();else if(view==="rocks")renderRocks();else if(view==="leadgen")renderLeadGen();else renderHuddle();}
 
-function route(){
-  switch(tab){
-    case 'leadgen': return viewLeadGen();
-    case 'bd':      return soon('BD','Larson &amp; Royce · meetings + handovers to CR (actual &amp; forecast)');
-    case 'mgmt':    return soon('Management','Lead Gen &amp; BD snapshots with drill-down');
-    case 'rocks':   return soon('Key Rocks','Top-3 daily rocks + notifications');
-    case 'bonus':   return soon('Bonus tracker','Monthly team handovers → % unlocked + £ to next tier');
-    case 'huddle':  return soon('Morning Huddle','Fresh daily overview for the LG huddle');
-    case 'admin':   return soon('Admin','Targets, users &amp; config');
-    default:        return viewLeadGen();
-  }
+function renderApp(){
+  const roleLabel={admin:"Admin",manager:"Manager",member:"Member"}[ME.role]||"Member",teamLabel={lead_gen:"Lead Gen",bd:"Business Dev",management:"Management"}[ME.team]||"";
+  let navHtml="",lastG="";NAVDEF.filter(n=>canSee(n.v)).forEach(n=>{if(n.g!==lastG){navHtml+=`<div class="navlbl">${n.g}</div>`;lastG=n.g;}navHtml+=`<a data-v="${n.v}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${n.ic}</svg> ${n.label}${n.v==='rocks'&&ME.is_rock_owner?'<span class="tag">YOU</span>':''}</a>`;});
+  document.getElementById("root").innerHTML=`<div class="app"><aside class="side"><div class="brand">${LOGO}</div><nav class="nav" id="nav">${navHtml}</nav>
+    <div class="sfoot"><div class="who"><span class="dot"></span>${esc(ME.name||SB.email||"")}</div><div class="rl">${teamLabel} · ${roleLabel}</div><button onclick="SB.clear();location.reload()">Sign out</button></div></aside>
+    <main class="main"><div class="top"><div><h1 id="ptitle">Morning Huddle</h1><div class="sub" id="psub"></div></div>
+      <div class="pc" id="pc"><div class="seg" id="gran"><button data-g="week">Week</button><button data-g="month" class="active">Month</button><button data-g="quarter">Quarter</button></div>
+      <div class="step"><button id="prevb">‹</button><span class="rng" id="rng">This month</span><button id="nextb" disabled>›</button></div></div></div>
+      <div class="content" id="out"></div></main></div>`;
+  document.getElementById("gran").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;G=b.dataset.g;O=0;route();});
+  document.getElementById("prevb").addEventListener("click",()=>{O-=1;route();});
+  document.getElementById("nextb").addEventListener("click",()=>{if(O<0){O+=1;route();}});
+  document.getElementById("nav").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;view=a.dataset.v;O=0;route();});
+  route();setInterval(pollNotifs,15000);pollNotifs();
 }
-
-/* ============================================================
-   BOOT
-   ============================================================ */
-async function boot(){
-  const u = await SB.me();
-  if(!u){ SB.clear(); return renderLogin(); }
-  const rows = await SB.rest(`profile?user_id=eq.${u.id}&select=*`);
-  if(!rows || !rows.length){
-    el.innerHTML=`<div class="login-wrap"><div class="login">${LOGO}
-      <h3>No access</h3><p class="hint">This login isn't on the NHS BD team list. Ask Kyle to add you.</p>
-      <button class="btn" onclick="SB.clear();location.reload()">Sign out</button></div></div>`; return;
-  }
-  profile = rows[0];
-  tab = tabsFor(profile)[0][0];
-  route();
+async function loadMe(){try{const rows=await SB.rest(`profile?select=full_name,team,role,is_rock_owner&email=eq.${encodeURIComponent(SB.email)}`);
+  if(rows&&rows[0])ME={name:rows[0].full_name,team:rows[0].team,role:rows[0].role,is_rock_owner:rows[0].is_rock_owner};else ME={name:SB.email,team:"management",role:"member",is_rock_owner:false};}catch(e){ME={name:SB.email,team:"management",role:"member",is_rock_owner:false};}}
+function renderLogin(mode){mode=mode||"login";
+  document.getElementById("root").innerHTML=`<div class="login-wrap"><form class="login" id="lf"><div class="lb">${LOGO}</div><h3>${mode==='login'?'Sign in':'Set your password'}</h3><p class="hint">${mode==='login'?'NHS Business Development team':'First time? Create your password.'}</p>
+    <label class="f">Work email</label><input id="em" type="email" placeholder="you@harmonyfire.com"/><label class="f">Password</label><input id="pw" type="password" placeholder="••••••••"/>
+    <button class="btn" id="go">${mode==='login'?'Sign in':'Create & sign in'}</button><button type="button" class="btn sec" id="sw">${mode==='login'?"First time? Set your password":'Back to sign in'}</button><div class="err" id="er"></div></form></div>`;
+  document.getElementById("sw").onclick=()=>renderLogin(mode==='login'?'signup':'login');
+  document.getElementById("lf").onsubmit=async e=>{e.preventDefault();const b=document.getElementById("go"),er=document.getElementById("er"),em=document.getElementById("em").value.trim(),pw=document.getElementById("pw").value;if(!em||!pw){er.textContent="Enter email and password.";return;}b.disabled=true;er.textContent="";
+    try{if(mode==='login')await SB.login(em,pw);else await SB.signup(em,pw);if(!SB.t){er.textContent="Check your inbox to confirm, then sign in.";b.disabled=false;return;}await SB.me();await loadMe();renderApp();}catch(err){er.textContent=err.message;b.disabled=false;}};
 }
-
-if(SUPABASE_URL.includes('YOUR-PROJECT')){
-  el.innerHTML=`<div class="login-wrap"><div class="login">${LOGO}
-    <h3>Almost there</h3><p class="hint">Add your Supabase Project URL and anon key at the top of this file, then reload.</p></div></div>`;
-} else if(SB.load()){ boot(); } else { renderLogin(); }
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+(async function(){if(SB.load()){const u=await SB.me();if(u){await loadMe();renderApp();return;}SB.clear();}renderLogin();})();
 </script>
 </body>
 </html>
